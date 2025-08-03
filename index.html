@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google Sheets Tutorial – QUERY + IMPORTRANGE</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #fff;
+      color: #222;
+      margin: 0;
+      padding: 0;
+        overflow-x: hidden;
+    }
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #666;
+    }
+
+    article h2 {
+      font-size: 1.4rem;
+      margin-top: 2rem;
+      color: #444;
+    }
+
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      overflow-x: auto;
+      border-left: 4px solid #ccc;overflow-x: auto;
+  word-wrap: normal;
+  white-space: pre-wrap;
+
+
+    }
+      
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    nav#index {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    /*nav bar */
+    .navbar {
+  background-color: #2c3e50;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #1abc9c;
+}
+/*side bar */
+.main-layout {
+  display: flex;
+  flex-direction: row;
+}
+
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  border-right: 1px solid #ddd;
+  padding: 1rem;
+  position: sticky;
+  top: 3.5rem;
+  height: calc(100vh - 3.5rem);
+  overflow-y: auto;
+}
+
+.manual-toc ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.manual-toc li {
+  margin-bottom: 0.75rem;
+}
+
+.manual-toc a {
+  color: #2c3e50;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.manual-toc a:hover {
+  color: #1abc9c;
+}
+
+.sidebar-title {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+.content-area {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+  /* .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    top: 0;
+  } */
+.sidebar {
+  width: 200px;
+  height: 100vh; /* Full viewport height */
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #f9f9f9;
+  border-right: 1px solid #ddd;
+  padding: 1rem;
+  overflow-y: auto; /* enables scrolling */
+  z-index: 100; /* stays behind navbar */
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+  .content-area {
+    padding: 1rem;
+    margin: 0;
+    max-width: 100%;
+     margin-left: 10px; /* same as sidebar width */
+  padding: 2rem;
+  max-width: 500px;
+  }
+
+  .sidebar-title {
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  .manual-toc ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+  }
+
+  .manual-toc li {
+    margin: 0;
+  }
+
+  .manual-toc a {
+    font-size: 0.9rem;
+  }
+.next-button {
+        width: 50%; /* Restrict the width to 80% of the screen */
+        max-width: 100px; /* Reduced max width for mobile */
+        margin: 0 auto; /* Center the button */
+        font-size: 1em; /* Adjust font size for smaller screens */
+    }
+    .previous-button {
+        width: 50%; /* Restrict the width to 80% of the screen */
+        max-width: 100px; /* Reduced max width for mobile */
+        margin: 0 auto; /* Center the button */
+        font-size: 1em; /* Adjust font size for smaller screens */
+    }
+
+
+/* 📳 For small phones */
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  article h2 {
+    font-size: 1.2rem;
+  }
+
+  code, pre {
+    font-size: 0.85rem;
+  }
+
+  /* Adjust Navbar for Mobile */
+  .navbar {
+    flex-direction: column;
+    padding: 0.5rem 1rem;
+    align-items: flex-start;
+  }
+
+  .nav-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  /* Adjust Sidebar */
+  .main-layout {
+    display: block; /* Stack the sidebar and content vertically */
+    width: 100%;
+  }
+
+  .sidebar {
+    width: 100%; /* Sidebar takes full width */
+    padding: 1rem;
+    position: relative;
+    border-right: none;
+    box-shadow: none;
+    margin-bottom: 1rem; /* Space between sidebar and content */
+  }
+
+  /* Adjust Content Area */
+  .content-area {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  /* Optional: If you want to hide the sidebar on very small screens */
+  /* .sidebar {
+    display: none;
+  } */
+
+  /* Adjust buttons or other elements for small screens */
+  .next-button {
+    width: 50%; /* Make the button full-width */
+    padding: 12px;
+    font-size: 14px;
+  }
+ .previous-button {
+    width: 50%; /* Make the button full-width */
+    padding: 12px;
+    font-size: 14px;
+  }
+  /* Make sure the content is responsive and not fixed width */
+  .container {
+    padding: 1rem;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/*button */
+.next-button {
+    padding: 12px 25px;
+    background-color: #1abc9c;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    text-align: center;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.next-button:hover {
+    background-color: #16a085;
+}
+
+/*previous button */
+
+/* Previous Button (Blue) */
+.previous-button {
+    padding: 12px 25px;
+    background-color: #3498db; /* Blue color */
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    text-align: center;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.previous-button:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+}
+@media (min-width: 769px) {
+  .main-layout {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .sidebar {
+    width: 250px;
+    height: calc(100vh - 3.5rem);
+    position: sticky;
+    top: 3.5rem;
+    border-right: 1px solid #ddd;
+    border-bottom: none;
+    margin-bottom: 0;
+    box-shadow: none;
+  }
+
+  .content-area {
+    flex: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .container {
+    max-width: 720px;
+    padding: 2rem;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+    <nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">📊 ExcelQuickGuide</div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#introduction">Page 1</a></li>
+      <li><a href="#example-formula">Page 2</a></li>
+      <li><a href="#toc">Page 3</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="main-layout">
+  <aside class="sidebar">
+    <nav class="manual-toc">
+      <h2 class="sidebar-title">📊 Guide Navigation</h2>
+<ul>
+  
+    <ul>
+  <li><a href="#program1">1.1 📌 Emojis in Google Sheets</a></li>
+  <li><a href="#program2">1.2 🔍 How to Link Postal Addresses to Google Maps in Google Sheets</a></li>
+  <li><a href="#program3">1.3 🧪 How to Email Google Sheets Automatically on a Recurring Schedule</a></li>
+  <li><a href="#program4">1.4 🔍 Google Maps Formulas for Google Sheets</a></li>
+  <li><a href="#program5">1.5 🧪 Create a BMI Calculator using Google Forms and Google Sheets</a></li>
+  <li><a href="#program6">1.6 🔍 How to Sort Google Sheets Automatically with Apps Script</a></li>
+  <li><a href="#program7">1.7 📌 How to Make Phone Numbers Callable in Google Sheets and Docs</a></li>   
+  <li><a href="#program8">1.8 🔍 How to Send Personalized Text Messages from Google Sheets</a></li>
+  <li><a href="#program9">1.9 🧪 Send WhatsApp Messages with a Google Sheets Function</a></li>
+<li><a href="#program10">1.10 🔍 Color Codes for Google Spreadsheets</a></li>
+  <li><a href="#program11">1.11 🧪 How to Send WhatsApp Messages from Google Sheets using the WhatsApp API</a></li>
+  <li><a href="#program12">1.12 📌 How to Open a Website in New Window from Google Sheets Menu</a></li>
+  <li><a href="#program13">1.13 🧪 How to Play an MP3 File in Google Sheets</a></li>
+  <li><a href="#program14">1.14 🔍 How to Auto-Download Podcasts to Google Drive with Google Sheets</a></li>
+      <li><a href="#program15">1.15 🧪How to Use Conditional Formatting in Google Sheets to Highlight Information</a></li>
+  <li><a href="#program16">1.16 🔍 How to Insert Images in Google Sheet Cells</a></li>
+  <li><a href="#program17">1.17 📌 How to Send SMS Messages with Google Sheets and Android Phone</a></li>
+  <li><a href="#program18">1.18 🔍 How to Import PayPal Transactions into Google Sheets</a></li>
+  <li><a href="#program19">1.19 🧪 How to Get the Last Row in Google Sheets when using ArrayFormula</a></li>
+  <li><a href="#program20">1.20 🔍 How to Extract URLs from HYPERLINK Function in Google Sheets</a></li>
+  <li><a href="#program21">1.21 🧪 How to Use Hyperlinks in Google Sheets</a></li>  
+ </ul>
+</ul>
+    </nav>
+  </aside>
+
+  <div class="content-area">
+<h2 id="program1">1.1 📌 Emojis in Google Sheets</h2>
+<p>You can insert emojis in Google Sheets using the built-in emoji keyboard. On Windows, press <code>Win + .</code> and on Mac, press <code>Control + Command + Space</code> to open the emoji picker. These emojis can be used in cells, headers, or comments to make your data more visual.</p>
+<hr/>
+
+<h2 id="program2">1.2 🔍 How to Link Postal Addresses to Google Maps in Google Sheets</h2>
+<p>Use the <code>HYPERLINK</code> formula to link any address to Google Maps. Example:<br>
+<code>=HYPERLINK("https://www.google.com/maps/search/" & A1, "Map Link")</code><br>
+This will create a clickable link to the address entered in cell A1.</p>
+<hr/>
+
+<h2 id="program3">1.3 🧪 How to Email Google Sheets Automatically on a Recurring Schedule</h2>
+<p>Use Google Apps Script and set a time-based trigger:<br>
+<code>ScriptApp.newTrigger("sendSheet").timeBased().everyDays(1).create();</code><br>
+Inside the <code>sendSheet</code> function, use <code>MailApp.sendEmail()</code> to email the sheet content.</p>
+<hr/>
+
+<h2 id="program4">1.4 🔍 Google Maps Formulas for Google Sheets</h2>
+<p>Create distance or geolocation formulas using custom Google Apps Script that leverages the Google Maps API. For example:<br>
+<code>=GOOGLEMAPS_DISTANCE(A2, B2, "driving")</code> to find driving distance between two locations.</p>
+<hr/>
+
+<h2 id="program5">1.5 🧪 Create a BMI Calculator using Google Forms and Google Sheets</h2>
+<p>Link a Google Form that collects height (cm) and weight (kg). In the sheet, use:<br>
+<code>=ROUND(B2 / (POWER(C2/100, 2)), 2)</code><br>
+This formula calculates BMI using the formula \( \text{BMI} = \frac{weight}{height^2} \).</p>
+<hr/>
+
+<h2 id="program6">1.6 🔍 How to Sort Google Sheets Automatically with Apps Script</h2>
+<p>Write a script like:<br>
+<code>sheet.getRange("A2:C").sort({column: 2, ascending: true});</code><br>
+Attach it to a trigger or custom menu to sort your sheet automatically.</p>
+<hr/>
+
+<h2 id="program7">1.7 📌 How to Make Phone Numbers Callable in Google Sheets and Docs</h2>
+<p>Use the <code>HYPERLINK</code> formula:<br>
+<code>=HYPERLINK("tel:" & A1, "Call Now")</code><br>
+This creates a clickable link that opens the phone app when clicked on mobile or supported devices.</p>
+<hr/>
+
+<h2 id="program8">1.8 🔍 How to Send Personalized Text Messages from Google Sheets</h2>
+<p>Use Google Apps Script and a messaging API like Twilio. Loop through rows and send personalized messages using <code>UrlFetchApp.fetch()</code> inside a script connected to your sheet.</p>
+<hr/>
+
+<h2 id="program9">1.9 🧪 Send WhatsApp Messages with a Google Sheets Function</h2>
+<p>Use WhatsApp's click-to-chat link format:<br>
+<code>https://wa.me/&lt;phone_number&gt;</code><br>
+You can build this dynamically in a formula: <code>=HYPERLINK("https://wa.me/" & A2, "Message")</code></p>
+<hr/>
+
+<h2 id="program10">1.10 🔍 Color Codes for Google Spreadsheets</h2>
+<p>Apply custom colors using HEX codes in Apps Script:<br>
+<code>sheet.getRange("A1").setBackground("#FF5733");</code><br>
+You can also use conditional formatting rules with color ranges in the UI.</p>
+<hr/>
+
+<h2 id="program11">1.11 🧪 How to Send WhatsApp Messages from Google Sheets using the WhatsApp API</h2>
+<p>Use the Twilio API for WhatsApp. In Apps Script:<br>
+- Setup headers and body for a <code>POST</code> request<br>
+- Use <code>UrlFetchApp.fetch(endpoint, options)</code> to send the message</p>
+<hr/>
+
+<h2 id="program12">1.12 📌 How to Open a Website in New Window from Google Sheets Menu</h2>
+<p>Use Apps Script:<br>
+<code>HtmlService.createHtmlOutput('<script>window.open("https://site.com")</script>')</code><br>
+This code can be run from a custom menu to open a link in a new tab.</p>
+<hr/>
+
+<h2 id="program13">1.13 🧪 How to Play an MP3 File in Google Sheets</h2>
+<p>Use the <code>HYPERLINK</code> function:<br>
+<code>=HYPERLINK("https://example.com/song.mp3", "Play Audio")</code><br>
+Or use Apps Script + HtmlService to embed an audio player.</p>
+<hr/>
+
+<h2 id="program14">1.14 🔍 How to Auto-Download Podcasts to Google Drive with Google Sheets</h2>
+<p>Use Apps Script to parse podcast RSS feed and download MP3 using:<br>
+<code>DriveApp.createFile(UrlFetchApp.fetch(podcast_url))</code><br>
+Automate it with triggers for daily syncing.</p>
+<hr/>
+
+<h2 id="program15">1.15 🧪 How to Use Conditional Formatting in Google Sheets to Highlight Information</h2>
+<p>Go to Format → Conditional formatting. Use custom formulas like:<br>
+<code>=A1>100</code> to highlight cells greater than 100 with your chosen format style.</p>
+<hr/>
+
+<h2 id="program16">1.16 🔍 How to Insert Images in Google Sheet Cells</h2>
+<p>Use the <code>=IMAGE("URL")</code> function to display images directly in cells.<br>
+Example: <code>=IMAGE("https://example.com/photo.jpg")</code></p>
+<hr/>
+
+<h2 id="program17">1.17 📌 How to Send SMS Messages with Google Sheets and Android Phone</h2>
+<p>Use a service like IFTTT or Pushbullet. Trigger it from Apps Script via webhook:<br>
+<code>UrlFetchApp.fetch("https://maker.ifttt.com/trigger/...")</code></p>
+<hr/>
+
+<h2 id="program18">1.18 🔍 How to Import PayPal Transactions into Google Sheets</h2>
+<p>Option 1: Export CSV from PayPal and use <code>IMPORTDATA</code><br>
+Option 2: Use PayPal API + OAuth and Apps Script to pull data programmatically.</p>
+<hr/>
+
+<h2 id="program19">1.19 🧪 How to Get the Last Row in Google Sheets when using ArrayFormula</h2>
+<p>Use:<br>
+<code>=MAX(FILTER(ROW(A:A), NOT(ISBLANK(A:A))))</code><br>
+Or in Apps Script: <code>sheet.getLastRow()</code></p>
+<hr/>
+
+<h2 id="program20">1.20 🔍 How to Extract URLs from HYPERLINK Function in Google Sheets</h2>
+<p>Use REGEX formula:<br>
+<code>=REGEXEXTRACT(FORMULATEXT(A1), "https://[^\\\"]+")</code><br>
+Or write a custom Apps Script parser function.</p>
+<hr/>
+
+<h2 id="program21">1.21 🧪 How to Use Hyperlinks in Google Sheets</h2>
+<p>Use the formula:<br>
+<code>=HYPERLINK("https://example.com", "Visit Site")</code><br>
+Also link to other tabs using <code>#gid=</code> format.</p>
+<hr/>
+    <footer>
+      <p>© 2025 ExcelQuickGuide.com • Helping Poor Students</p>
+    </footer>
+  </div>
+
+  <!-- JavaScript for Dynamic Table of Contents -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const toc = document.getElementById("toc");
+      const sections = document.querySelectorAll("main section");
+      let html = "<h2>Index</h2><ul>";
+
+      sections.forEach(sec => {
+        const id = sec.id;
+        const title = sec.querySelector("h2").innerText;
+        html += `<li><a href="#${id}">${title}</a></li>`;
+      });
+
+      html += "</ul>";
+      toc.innerHTML = html;
+    });
+  </script>
+</body>
+</html>
